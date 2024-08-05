@@ -54,29 +54,40 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    const { id, email_addresses, username, first_name, last_name, image_url } =
-      evt.data;
+    try {
+      const {
+        id,
+        email_addresses,
+        username,
+        first_name,
+        last_name,
+        image_url,
+      } = evt.data;
 
-    const user = {
-      clerkId: id,
-      email: email_addresses[0].email_address,
-      username: username!,
-      firstName: first_name || "first name",
-      lastName: last_name || "last name",
-      photo: image_url,
-    };
+      const user = {
+        clerkId: id,
+        email: email_addresses[0].email_address,
+        username: username! || email_addresses[0].email_address,
+        firstName: first_name || "first name",
+        lastName: last_name || "last name",
+        photo: image_url,
+      };
 
-    const newUser = await createUser(user);
+      const newUser = await createUser(user);
 
-    if (newUser) {
-      await clerkClient.users.updateUserMetadata(id, {
-        publicMetadata: {
-          userId: newUser._id,
-        },
-      });
+      if (newUser) {
+        await clerkClient.users.updateUserMetadata(id, {
+          publicMetadata: {
+            userId: newUser._id,
+          },
+        });
+      }
+
+      return NextResponse.json({ message: "Ok", user: newUser });
+    } catch (error) {
+      console.error("Error in user creation event:");
+      return new Response("Internal Server Error", { status: 300 });
     }
-
-    return NextResponse.json({ message: "Ok", user: newUser });
   }
 
   return new Response("", { status: 200 });
