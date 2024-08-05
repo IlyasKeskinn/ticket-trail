@@ -8,7 +8,7 @@ import MobileNavigation from "./MobileNavigation";
 
 const Header = () => {
   return (
-    <header className="bg-zinc-50 border-b-2 border-slate-100">
+    <header className="border-b-2 border-slate-50 shadow-sm">
       <div className=" wrapper flex justify-between items-center ">
         <div id="logo" className="cursor-pointer">
           <Link href={"/"}>
