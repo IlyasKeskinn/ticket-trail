@@ -18,7 +18,9 @@ export default function Home() {
               events all in one convenient place.
             </p>
             <Link href={"#events"}>
-              <Button className="w-32 py-7 px-20">Explore Events</Button>
+              <Button className="py-7 px-20 w-full sm:w-fit">
+                Explore Events
+              </Button>
             </Link>
           </div>
           <div className="md:w-1/2 w-full md:flex items-center justify-center">
