@@ -21,8 +21,14 @@ export default function Home() {
               <Button className="w-32 py-7 px-20">Explore Events</Button>
             </Link>
           </div>
-          <div className="md:w-1/2 w-full">
-            <Image alt="hero" src={"/hero.png"} width={500} height={400} />
+          <div className="md:w-1/2 w-full md:flex items-center justify-center">
+            <Image
+              alt="hero"
+              src={"/hero.png"}
+              className="object-cover object-center max-h-[70vh] 2xl:max-h-[50vh]:"
+              width={500}
+              height={400}
+            />
           </div>
         </div>
       </div>
