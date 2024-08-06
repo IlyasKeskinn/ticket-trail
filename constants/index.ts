@@ -12,3 +12,18 @@ export const headerLinks = [
     route: "/profile",
   },
 ];
+
+export const eventDefaultValues = {
+  title: "",
+  desc: "",
+  countryId : "",
+  cityId : "",
+  location: "",
+  image: "",
+  startDateTime: new Date(),
+  endDateTime: new Date(),
+  categoryId: "",
+  price: "",
+  isFree: false,
+  url: "",
+};

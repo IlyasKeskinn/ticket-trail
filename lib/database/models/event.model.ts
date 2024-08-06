@@ -1,6 +1,6 @@
 import { Schema, Types, model, models, Document } from "mongoose";
 
-interface IEvent extends Document {
+export interface IEvent extends Document {
   _id: string;
   title: string;
   desc: string;

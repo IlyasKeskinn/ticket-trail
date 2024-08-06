@@ -1,6 +1,6 @@
 import { Schema, model, models, Document, Types } from "mongoose";
 
-interface ICity extends Document {
+export interface ICity extends Document {
   _id: string;
   name: string;
   country: { _id: string; name: string };
