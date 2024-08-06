@@ -15,6 +15,7 @@ const Header = () => {
             <Image src="/logo.png" alt={"logo"} width={200} height={100} />
           </Link>
         </div>
+
         <nav className="md:flex hidden justify-between items-center gap-5">
           <SignedIn>
             <NavItems />
@@ -31,7 +32,8 @@ const Header = () => {
             </Link>
           </SignedOut>
         </nav>
-        <div className="md:hidden block">
+        <div className="md:hidden flex justify-between items-center gap-5">
+          <UserButton />
           <MobileNavigation />
         </div>
       </div>

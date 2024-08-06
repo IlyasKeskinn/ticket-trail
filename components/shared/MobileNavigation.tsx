@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Separator } from "../ui/separator";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { CiMenuBurger } from "react-icons/ci";
 
@@ -19,8 +18,6 @@ const MobileNavigation = () => {
         </SheetTrigger>
         <SheetContent>
           <SignedIn>
-            <UserButton />
-            <Separator />
             <NavItems />
           </SignedIn>
           <SignedOut>
