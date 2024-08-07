@@ -20,9 +20,11 @@ export type CreateUserParams = {
     userId: string
     event: {
       title: string
-      description: string
+      desc: string
+      countryId: string,
+      cityId: string,
       location: string
-      imageUrl: string
+      image: string
       startDateTime: Date
       endDateTime: Date
       categoryId: string
@@ -38,9 +40,11 @@ export type CreateUserParams = {
     event: {
       _id: string
       title: string
-      imageUrl: string
-      description: string
+      desc: string
+      countryId: string,
+      cityId: string,
       location: string
+      image: string
       startDateTime: Date
       endDateTime: Date
       categoryId: string
@@ -146,4 +150,11 @@ export type CreateUserParams = {
   export type SearchParamProps = {
     params: { id: string }
     searchParams: { [key: string]: string | string[] | undefined }
+  }
+
+
+  //city
+
+  export type getCitiesByCounrtyId = {
+    country: string
   }

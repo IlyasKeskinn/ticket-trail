@@ -29,6 +29,9 @@ import CityDropdown from "./CityDropdown";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { IEvent } from "@/lib/database/models/event.model";
+import { useUploadThing } from "@/lib/uploadthing";
+import { createEvent } from "@/lib/actions/event.actions";
+import { useRouter } from "next/navigation";
 
 type EventFormProps = {
   type: "Create" | "Update";
@@ -45,15 +48,50 @@ export default function EventForm({
 }: EventFormProps) {
   const initalValues = eventDefaultValues;
   const [files, setFiles] = useState<File[]>([]);
-  const [startDate, setStartDate] = useState(new Date());
+  const [country, setCountry] = useState<string>("");
+  const router = useRouter();
+
+  const { startUpload } = useUploadThing("imageUploader");
+
+
+  
 
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
     defaultValues: initalValues,
   });
-  function onSubmit(values: z.infer<typeof eventSchema>) {
-    console.log(values);
+
+  async function onSubmit(values: z.infer<typeof eventSchema>) {
+    let uploadImageUrl = values.image;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+
+      if (!uploadedImages) {
+        return;
+      }
+
+      uploadImageUrl = uploadedImages[0].url;
+    }
+
+    if (type === "Create") {
+      try {
+        const newEvent = await createEvent({
+          userId,
+          event: { ...values, image: uploadImageUrl },
+          path: "/profile",
+        });
+
+        if (newEvent) {
+          form.reset();
+          router.push(`events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
+
   return (
     <Form {...form}>
       <form
@@ -138,6 +176,7 @@ export default function EventForm({
                   <CountryDropdown
                     onChangeHandler={field.onChange}
                     value={field.value}
+                    setCountry={setCountry}
                   />
                 </FormControl>
                 <FormMessage />
@@ -153,6 +192,7 @@ export default function EventForm({
                   <CityDropdown
                     onChangeHandler={field.onChange}
                     value={field.value}
+                    countryId={country}
                   />
                 </FormControl>
                 <FormMessage />
@@ -308,8 +348,12 @@ export default function EventForm({
           />
         </div>
 
-        <Button type="submit" className="md:w-fit w-full">
-          Submit
+        <Button
+          type="submit"
+          className="md:w-fit w-full"
+          disabled={form.formState.isSubmitting}
+        >
+          {type} Event
         </Button>
       </form>
     </Form>

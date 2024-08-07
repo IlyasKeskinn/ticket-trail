@@ -8,12 +8,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-screen flex justify-center items-center bg-dotted-spacing-5 bg-dotted-slate-400">
-      <div className="flex flex-col gap-4">
-        <Link style={{width  : "100%"}} href="/">
-          <Button className="w-full">Back to home</Button>
-        </Link>
-        {children}
-      </div>
+      <div className="flex flex-col gap-4">{children}</div>
     </div>
   );
 }

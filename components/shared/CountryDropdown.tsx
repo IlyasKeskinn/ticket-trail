@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Select,
   SelectContent,
@@ -7,24 +6,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getAllCountry } from "@/lib/actions/country.actions";
 
 import { ICountry } from "@/lib/database/models/country.model";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface IDropdownProps {
   value?: string;
-  onChangeHandler?: () => void;
+  onChangeHandler?: (countryId: string) => void;
   isCategoryDropdown?: boolean;
+  setCountry: Dispatch<SetStateAction<string>>;
 }
 export default function CountryDropdown({
   value,
   onChangeHandler,
+  setCountry,
 }: IDropdownProps) {
   const [countries, setCountries] = useState<ICountry[]>([]);
 
+  useEffect(() => {
+    const getCountries = async () => {
+      const countryList = await getAllCountry();
+      countryList && setCountries(countryList as ICountry[]);
+    };
+
+    getCountries();
+  }, []);
+
+  const onChancgeCountry = (e: string) => {
+    if (onChangeHandler) {
+      onChangeHandler(e);
+    }
+    setCountry(e);
+  };
+
   return (
-    <Select onValueChange={onChangeHandler} defaultValue={value}>
+    <Select
+      onValueChange={(e) => {
+        onChancgeCountry(e);
+      }}
+      defaultValue={value}
+    >
       <SelectTrigger className="select-field">
         <SelectValue placeholder="Country" />
       </SelectTrigger>
@@ -33,7 +56,7 @@ export default function CountryDropdown({
           countries.map((country) => (
             <SelectItem
               key={country._id}
-              value={country.name}
+              value={country._id}
               className="select-item py-12"
             >
               {country.name}

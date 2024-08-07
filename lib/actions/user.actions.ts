@@ -5,6 +5,7 @@ import { handleError } from "../utils";
 import { connectToDatabase } from "../database";
 import User from "../database/models/user.model";
 import { revalidatePath } from "next/cache";
+import City from "../database/models/city.model";
 
 export async function createUser(user: CreateUserParams) {
   try {
@@ -45,7 +46,7 @@ export async function deleteUser(clerkId: string) {
     if (!user) throw new Error("User not found");
 
     const deletedUser = await User.findByIdAndDelete(user._id);
-    revalidatePath('/')
+    revalidatePath("/");
 
     return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {

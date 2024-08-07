@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Select,
   SelectContent,
@@ -20,8 +18,9 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { ICategory } from "@/lib/database/models/category.model";
-import { startTransition, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { Input } from "../ui/input";
+import { createCategory, getAllCategory } from "@/lib/actions/category.actions";
 
 interface IDropdownProps {
   value?: string;
@@ -34,16 +33,24 @@ export default function Dropdown({
   isCategoryDropdown,
 }: IDropdownProps) {
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [newCategory, setNewCategory] = useState("");
+  const [newCategory, setNewCategory] = useState<string>("");
 
   const handleAddCategory = () => {
-    console.log(newCategory);
+    createCategory({ categoryName: newCategory.trim() }).then((category) =>
+      setCategories((prevCat) => [...prevCat, category])
+    );
   };
+
+  useEffect(() => {
+    const getCategories = async () => {
+      const categoryList = await getAllCategory();
+
+      categoryList && setCategories(categoryList as ICategory[]);
+    };
+    getCategories();
+  }, []);
   return (
-    <Select
-      onValueChange={onChangeHandler}
-      defaultValue={value}
-    >
+    <Select onValueChange={onChangeHandler} defaultValue={value}>
       <SelectTrigger className="select-field">
         <SelectValue placeholder="Category" />
       </SelectTrigger>
@@ -52,7 +59,7 @@ export default function Dropdown({
           categories.map((category) => (
             <SelectItem
               key={category._id}
-              value={category.name}
+              value={category._id}
               className="select-item py-12"
             >
               {category.name}
