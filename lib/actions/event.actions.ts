@@ -166,7 +166,7 @@ export async function getRelatedEventsByCategory({
     const conditions = { $and: [{ category: categoryId }, { _id: { $ne: eventId } }] }
 
     const eventsQuery = Event.find(conditions)
-      .sort({ createdAt: 'desc' })
+      .sort({ createdAt: 'desc' }) 
       .skip(skipAmount)
       .limit(limit)
 

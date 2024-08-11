@@ -53,8 +53,7 @@ export default function EventForm({
           startDateTime: new Date(event.startDateTime),
           endDateTime: new Date(event.endDateTime),
         }
-      : eventDefaultValues;
-
+      : eventDefaultValues; 
   const [files, setFiles] = useState<File[]>([]);
   const [country, setCountry] = useState("");
   const router = useRouter();

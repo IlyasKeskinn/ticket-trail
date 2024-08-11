@@ -14,16 +14,16 @@ export const headerLinks = [
 ];
 
 export const eventDefaultValues = {
-  title: "",
-  desc: "",
-  countryId : "",
-  cityId : "",
-  location: "",
-  image: "",
+  title: '',
+  desc: '',
+  countryId : '',
+  cityId : '',
+  location: '',
+  image: '',
   startDateTime: new Date(),
   endDateTime: new Date(),
-  categoryId: "",
-  price: "",
+  categoryId: '',
+  price: '',
   isFree: false,
-  url: "",
-};
+  url: '',
+}

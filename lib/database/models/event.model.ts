@@ -1,6 +1,6 @@
 import { Schema, Types, model, models, Document } from "mongoose";
 
-export interface IEvent extends Document {
+export interface IEvent {
   _id: string;
   title: string;
   desc: string;
@@ -8,8 +8,8 @@ export interface IEvent extends Document {
   city: { _id: string; name: string };
   location?: string;
   createdAt: Date;
-  image: String;
-  seatPlan?: String;
+  image: string;
+  seatPlan?: string;
   startDateTime: Date;
   endDateTime: Date;
   price: string;
