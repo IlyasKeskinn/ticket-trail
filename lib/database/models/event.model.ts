@@ -12,7 +12,7 @@ export interface IEvent extends Document {
   seatPlan?: String;
   startDateTime: Date;
   endDateTime: Date;
-  price?: string;
+  price: string;
   isFree: boolean;
   url?: string;
   category: { _id: string; name: string };

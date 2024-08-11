@@ -16,7 +16,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { eventSchema } from "@/lib/validator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FileUploader } from "./FileUploader";
 import { LiaMapMarkerAltSolid } from "react-icons/lia";
 import { CiCalendar } from "react-icons/ci";
@@ -30,14 +30,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { IEvent } from "@/lib/database/models/event.model";
 import { useUploadThing } from "@/lib/uploadthing";
-import { createEvent } from "@/lib/actions/event.actions";
+import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 import { useRouter } from "next/navigation";
 
 type EventFormProps = {
-  type: "Create" | "Update";
   userId: string;
-  eventId?: string;
+  type: "Create" | "Update";
   event?: IEvent;
+  eventId?: string;
 };
 
 export default function EventForm({
@@ -46,19 +46,30 @@ export default function EventForm({
   eventId,
   event,
 }: EventFormProps) {
-  const initalValues = eventDefaultValues;
+  const initialValues =
+    event && type === "Update"
+      ? {
+          ...event,
+          startDateTime: new Date(event.startDateTime),
+          endDateTime: new Date(event.endDateTime),
+        }
+      : eventDefaultValues;
+
   const [files, setFiles] = useState<File[]>([]);
-  const [country, setCountry] = useState<string>("");
+  const [country, setCountry] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    if (type === "Update") {
+      setCountry(event?.country._id!);
+    }
+  }, [event]);
 
   const { startUpload } = useUploadThing("imageUploader");
 
-
-  
-
   const form = useForm<z.infer<typeof eventSchema>>({
     resolver: zodResolver(eventSchema),
-    defaultValues: initalValues,
+    defaultValues: initialValues,
   });
 
   async function onSubmit(values: z.infer<typeof eventSchema>) {
@@ -84,7 +95,29 @@ export default function EventForm({
 
         if (newEvent) {
           form.reset();
-          router.push(`events/${newEvent._id}`);
+          router.push(`/events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (type === "Update") {
+      if (!eventId) {
+        router.back();
+        return;
+      }
+
+      try {
+        const updatedEvent = await updateEvent({
+          userId,
+          event: { ...values, image: uploadImageUrl, _id: eventId },
+          path: `/events/${eventId}`,
+        });
+
+        if (updatedEvent) {
+          form.reset();
+          router.push(`/events/${updatedEvent._id}`);
         }
       } catch (error) {
         console.log(error);

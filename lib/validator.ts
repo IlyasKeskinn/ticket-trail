@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const eventSchema = z.object({
-  title: z.string().min(3, { message: "Title must be at least 3 characters." }),
+  title: z
+    .string()
+    .min(3, { message: "Title must be at least 3 characters." })
+    .max(150, { message: "Title must be less than 150 characters." }),
   desc: z
     .string()
     .min(3, { message: "Desc must be at least 3 characters. " })
